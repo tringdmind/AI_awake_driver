@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="https://i.ibb.co/cmP1Wx5/z7398913576575-213cf8d9f8e73a51fc98cbf1bc66af41-Photoroom.png">
+    <title>🚗 Hệ thống cảnh báo tài xế - Trường THPT Hùng Vương</title>
+
+    <!-- Thư viện MediaPipe từ CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/control_utils/control_utils.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh/face_mesh.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js"></script>
+
+    <!-- Stylesheet giao diện -->
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <img src="https://i.ibb.co/cmP1Wx5/z7398913576575-213cf8d9f8e73a51fc98cbf1bc66af41-Photoroom.png" alt="Logo trường THPT Hùng Vương" class="header-logo">
+            <div class="header-content">
+                <h1>🚗 Hệ thống cảnh báo tài xế</h1>
+                <p>Phát hiện ngủ gật và tay rời vô lăng thời gian thực</p>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Video & Camera Section -->
+            <section class="video-section">
+                <div id="errorMessage" class="error-message"></div>
+
+                <div class="video-container">
+                    <video id="video" autoplay playsinline></video>
+                    <canvas id="canvas"></canvas>
+                    
+                    <div id="loading" class="loading">
+                        <div>📸 Hãy cho phép sử dụng camera để bắt đầu giám sát</div>
+                    </div>
+                    
+                    <div id="alertDrowsy" class="alert-drowsy">
+                        ⚠️ CẢNH BÁO: TÀI XẾ NGỦ GẬT
+                    </div>
+                    
+                    <div id="alertHands" class="alert-hands">
+                        ⚠️ CẢNH BÁO: TAY RỜI VÔ LĂNG
+                    </div>
+
+                    <div class="info-overlay">
+                        <div>
+                            <span>EAR</span>
+                            <span id="earValue" style="color: #10b981; font-weight: 600;">0.00</span>
+                        </div>
+                        <div>
+                            <div class="status-dot"></div>
+                            <span id="statusText">Đang chờ...</span>
+                        </div>
+                    </div>
+
+                    <div class="fps-counter">
+                        <span id="fpsValue">0</span> FPS
+                    </div>
+                </div>
+
+                <div class="controls">
+                    <button class="btn-start" id="startBtn">Bắt đầu giám sát</button>
+                    <button class="btn-stop" id="stopBtn" disabled>Dừng lại</button>
+                </div>
+            </section>
+
+            <!-- Sidebar & Settings -->
+            <aside class="sidebar">
+                <!-- Thống kê số liệu -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <h3>Mắt nhắm</h3>
+                        <div class="value" id="drowsyFramesCount">0</div>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Tay rời</h3>
+                        <div class="value" id="handOffFramesCount">0</div>
+                    </div>
+                    <div class="stat-card">
+                        <h3>CB ngủ gật</h3>
+                        <div class="value" id="drowsyAlerts">0</div>
+                    </div>
+                    <div class="stat-card">
+                        <h3>CB tay rời</h3>
+                        <div class="value" id="handAlerts">0</div>
+                    </div>
+                </div>
+
+                <!-- Bảng cài đặt thông số -->
+                <div class="settings-panel">
+                    <div class="settings-title">⚙️ Cài đặt</div>
+                    
+                    <div class="setting-item">
+                        <div class="setting-label">
+                            <span>Âm lượng</span>
+                            <span class="setting-value" id="volumeValue">100%</span>
+                        </div>
+                        <input type="range" id="volumeSlider" min="0" max="100" value="100">
+                    </div>
+
+                    <div class="divider"></div>
+
+                    <div class="setting-item">
+                        <div class="setting-label">
+                            <span>Ngưỡng EAR</span>
+                            <input type="number" id="earThreshold" value="0.25" step="0.01" min="0.1" max="0.4">
+                        </div>
+                    </div>
+
+                    <div class="setting-item">
+                        <div class="setting-label">
+                            <span>Frames ngủ gật</span>
+                            <input type="number" id="drowsyFrames" value="20" step="5" min="5" max="60">
+                        </div>
+                    </div>
+
+                    <div class="setting-item">
+                        <div class="setting-label">
+                            <span>Frames tay rời</span>
+                            <input type="number" id="handFrames" value="30" step="5" min="10" max="90">
+                        </div>
+                    </div>
+                </div>
+            </aside>
+        </main>
+    </div>
+
+    <!-- Các module JavaScript theo kiến trúc phân tầng -->
+    <script src="js/config.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/audio.js"></script>
+    <script src="js/ui.js"></script>
+    <script src="js/detector.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>

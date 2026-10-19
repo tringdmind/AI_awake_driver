@@ -1,0 +1,20 @@
+{
+  "name": "ai-driver-monitoring",
+  "version": "1.0.0",
+  "description": "Hệ thống cảnh báo tài xế ngủ gật và rời vô lăng thời gian thực - Trường THPT Hùng Vương",
+  "main": "index.html",
+  "scripts": {
+    "start": "npx serve . -l 3000",
+    "dev": "npx serve . -l 3000"
+  },
+  "keywords": [
+    "mediapipe",
+    "computer-vision",
+    "facemesh",
+    "drowsiness-detection",
+    "ear",
+    "hands-detection"
+  ],
+  "author": "Trường THPT Hùng Vương",
+  "license": "MIT"
+}
